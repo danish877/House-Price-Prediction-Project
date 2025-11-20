@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./model.pkl:/app/model.pkl
+      - ./pipeline.pkl:/app/pipeline.pkl
+    restart: unless-stopped
+    
+  streamlit:
+    build: .
+    command: streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./model.pkl:/app/model.pkl
+      - ./pipeline.pkl:/app/pipeline.pkl
+    restart: unless-stopped
